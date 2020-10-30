@@ -11,9 +11,7 @@ cant_carac_e_1_svc(char *argp, struct svc_req *rqstp)
 {
 	static int  result;
 
-	/*
-	 * insert server code here
-	 */
+	result=strlen(argp);
 
 	return &result;
 }
