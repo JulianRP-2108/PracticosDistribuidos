@@ -4,15 +4,24 @@
  * as a guideline for developing your own functions.
  */
 
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "servidor.h"
-
 int *
-cant_carac_e_1_svc(char *argp, struct svc_req *rqstp)
+cant_carac_e_1_svc(char *frase, struct svc_req *rqstp)
 {
 	static int  result;
-
-	result=strlen(argp);
-
+   printf("\n El parametro recibido es: %s",frase);
+   //result=0;
+   //char* aux=strcpy(aux,argp);
+   //printf("\n Aux es: %s",aux);
+	//while(*aux!='\0'){
+   //   result ++;
+   //   ++aux;
+   //   printf("\n dentro del while es: %c",aux[0]);
+   //}
+   //printf("\n El resultado es: %i",result);
 	return &result;
 }
 
