@@ -5,68 +5,67 @@
  */
 
 #include "servidor.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-
-void
-punto2server_1(char *host, char *frase)
+void punto2server_1(char *host, argumento palabras)
 {
 	CLIENT *clnt;
-	int  *result_1;
-	//char  cant_carac_e_1_arg;
-	int  *result_2;
-	//char  cant_carac_se_1_arg;
-	int  *result_3;
-	//char  cant_palabras_1_arg;
-	printf("\n El parametro enviado es: %s",frase);
-#ifndef	DEBUG
-	clnt = clnt_create (host, Punto2Server, VERSION_PROGRAMA, "udp");
-	if (clnt == NULL) {
-		clnt_pcreateerror (host);
-		exit (1);
-	}else{
-		printf("\n Conexion establecida con el servidor");
-	}
-#endif	/* DEBUG */
+	int *result_1;
+	//argumento cant_carac_e_1_arg;
+	int *result_2;
+	//argumento cant_carac_se_1_arg;
+	int *result_3;
+	//argumento cant_palabras_1_arg;
 
-	result_1 = cant_carac_e_1(frase, clnt);
-	if (result_1 == (int *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}else{
-		printf("\n La cantidad de caracteres incluyendo espacios es: %i",*result_1);
+#ifndef DEBUG
+	clnt = clnt_create(host, Punto2Server, VERSION_PROGRAMA, "udp");
+	if (clnt == NULL)
+	{
+		clnt_pcreateerror(host);
+		exit(1);
 	}
-	result_2 = cant_carac_se_1(frase, clnt);
-	if (result_2 == (int *) NULL) {
-		clnt_perror (clnt, "call failed");
+#endif /* DEBUG */
+
+	result_1 = cant_carac_e_1(&palabras, clnt);
+	if (result_1 == (int *)NULL)
+	{
+		clnt_perror(clnt, "call failed");
 	}else{
-		printf("\n La cantidad de caracteres sin espacion es: %i",*result_2);
+		printf("\n La cantidad de caracteres con espacios es: %d",*result_1);
 	}
-	result_3 = cant_palabras_1(frase, clnt);
-	if (result_3 == (int *) NULL) {
-		clnt_perror (clnt, "call failed");
+	result_2 = cant_carac_se_1(&palabras, clnt);
+	if (result_2 == (int *)NULL)
+	{
+		clnt_perror(clnt, "call failed");
 	}else{
-		printf("\n La cantidad de palabras es: %i",*result_3);
+		printf("\n La cantidad de caracteres sin espacios es: %d",*result_2);
 	}
-#ifndef	DEBUG
-	clnt_destroy (clnt);
-#endif	 /* DEBUG */
+	result_3 = cant_palabras_1(&palabras, clnt);
+	if (result_3 == (int *)NULL)
+	{
+		clnt_perror(clnt, "call failed");
+	}else{
+		printf("\n La cantidad de palabras es: %d",*result_3);
+	}
+#ifndef DEBUG
+	clnt_destroy(clnt);
+#endif /* DEBUG */
 }
 
-//METODO DE INVOCACION: ./servidor_client IP "frase a utilizar"
-int
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	char *host;
 	char *frase;
 
-	if (argc < 3) {
-		printf ("Parametros incorrectos\n");
+	if (argc < 3)
+	{
+		printf("Parametros incorrectos\n");
 		printf("Forma de uso: ./servidor_cliente IP_DESTINO 'frase a utilzar' (con comillas)");
-		exit (1);
+		exit(1);
 	}
 	host = argv[1];
 	frase = argv[2];
-	punto2server_1 (host,frase);
-exit (0);
+	argumento palabras;
+	palabras.frase=frase;
+	punto2server_1(host, palabras);
+	exit(0);
 }

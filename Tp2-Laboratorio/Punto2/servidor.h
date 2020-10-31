@@ -14,19 +14,24 @@ extern "C" {
 #endif
 
 
+struct argumento {
+	char *frase;
+};
+typedef struct argumento argumento;
+
 #define Punto2Server 0x20000001
 #define VERSION_PROGRAMA 1
 
 #if defined(__STDC__) || defined(__cplusplus)
 #define cant_carac_e 1
-extern  int * cant_carac_e_1(char *, CLIENT *);
-extern  int * cant_carac_e_1_svc(char *, struct svc_req *);
+extern  int * cant_carac_e_1(argumento *, CLIENT *);
+extern  int * cant_carac_e_1_svc(argumento *, struct svc_req *);
 #define cant_carac_se 2
-extern  int * cant_carac_se_1(char *, CLIENT *);
-extern  int * cant_carac_se_1_svc(char *, struct svc_req *);
+extern  int * cant_carac_se_1(argumento *, CLIENT *);
+extern  int * cant_carac_se_1_svc(argumento *, struct svc_req *);
 #define cant_palabras 3
-extern  int * cant_palabras_1(char *, CLIENT *);
-extern  int * cant_palabras_1_svc(char *, struct svc_req *);
+extern  int * cant_palabras_1(argumento *, CLIENT *);
+extern  int * cant_palabras_1_svc(argumento *, struct svc_req *);
 extern int punto2server_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
@@ -40,6 +45,16 @@ extern  int * cant_carac_se_1_svc();
 extern  int * cant_palabras_1();
 extern  int * cant_palabras_1_svc();
 extern int punto2server_1_freeresult ();
+#endif /* K&R C */
+
+/* the xdr functions */
+
+#if defined(__STDC__) || defined(__cplusplus)
+extern  bool_t xdr_argumento (XDR *, argumento*);
+
+#else /* K&R C */
+extern bool_t xdr_argumento ();
+
 #endif /* K&R C */
 
 #ifdef __cplusplus

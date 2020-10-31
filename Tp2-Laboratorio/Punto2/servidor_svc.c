@@ -20,9 +20,9 @@ static void
 punto2server_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
-		char cant_carac_e_1_arg;
-		char cant_carac_se_1_arg;
-		char cant_palabras_1_arg;
+		argumento cant_carac_e_1_arg;
+		argumento cant_carac_se_1_arg;
+		argumento cant_palabras_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -34,19 +34,19 @@ punto2server_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		return;
 
 	case cant_carac_e:
-		_xdr_argument = (xdrproc_t) xdr_char;
+		_xdr_argument = (xdrproc_t) xdr_argumento;
 		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) cant_carac_e_1_svc;
 		break;
 
 	case cant_carac_se:
-		_xdr_argument = (xdrproc_t) xdr_char;
+		_xdr_argument = (xdrproc_t) xdr_argumento;
 		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) cant_carac_se_1_svc;
 		break;
 
 	case cant_palabras:
-		_xdr_argument = (xdrproc_t) xdr_char;
+		_xdr_argument = (xdrproc_t) xdr_argumento;
 		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) cant_palabras_1_svc;
 		break;

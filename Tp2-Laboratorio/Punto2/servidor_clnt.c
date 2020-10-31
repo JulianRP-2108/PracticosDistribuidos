@@ -10,13 +10,13 @@
 static struct timeval TIMEOUT = { 25, 0 };
 
 int *
-cant_carac_e_1(char *argp, CLIENT *clnt)
+cant_carac_e_1(argumento *argp, CLIENT *clnt)
 {
 	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, cant_carac_e,
-		(xdrproc_t) xdr_char, (caddr_t) argp,
+		(xdrproc_t) xdr_argumento, (caddr_t) argp,
 		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -25,13 +25,13 @@ cant_carac_e_1(char *argp, CLIENT *clnt)
 }
 
 int *
-cant_carac_se_1(char *argp, CLIENT *clnt)
+cant_carac_se_1(argumento *argp, CLIENT *clnt)
 {
 	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, cant_carac_se,
-		(xdrproc_t) xdr_char, (caddr_t) argp,
+		(xdrproc_t) xdr_argumento, (caddr_t) argp,
 		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -40,13 +40,13 @@ cant_carac_se_1(char *argp, CLIENT *clnt)
 }
 
 int *
-cant_palabras_1(char *argp, CLIENT *clnt)
+cant_palabras_1(argumento *argp, CLIENT *clnt)
 {
 	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, cant_palabras,
-		(xdrproc_t) xdr_char, (caddr_t) argp,
+		(xdrproc_t) xdr_argumento, (caddr_t) argp,
 		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);

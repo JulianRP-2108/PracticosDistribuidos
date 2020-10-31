@@ -4,15 +4,12 @@
  * as a guideline for developing your own functions.
  */
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "servidor.h"
+
 int *
-cant_carac_e_1_svc(char *frase, struct svc_req *rqstp)
+cant_carac_e_1_svc(argumento *argp, struct svc_req *rqstp)
 {
 	static int  result;
-   printf("\n El parametro recibido es: %s",frase);
    //result=0;
    //char* aux=strcpy(aux,argp);
    //printf("\n Aux es: %s",aux);
@@ -26,38 +23,38 @@ cant_carac_e_1_svc(char *frase, struct svc_req *rqstp)
 }
 
 int *
-cant_carac_se_1_svc(char *argp, struct svc_req *rqstp)
+cant_carac_se_1_svc(argumento *argp, struct svc_req *rqstp)
 {
 	static int  result;
-;
-   while (*argp){
-      if (*argp== ' ' || *argp == '\n' || *argp == '\t'){
-         //nada
-      }
-      else { 
-         result++;
-      }
-      ++argp;
-   }
+
+   //while (*argp){
+   //   if (*argp== ' ' || *argp == '\n' || *argp == '\t'){
+   //      //nada
+   //   }
+   //   else { 
+   //      result++;
+   //   }
+   //   ++argp;
+   //}
 	return &result;
 }
 
 int *
-cant_palabras_1_svc(char *argp, struct svc_req *rqstp)
+cant_palabras_1_svc(argumento *argp, struct svc_req *rqstp)
 {
 	static int result=0;
 
 	int siguiente = 0;
-   while (*argp){
-      if (*argp== ' ' || *argp == '\n' || *argp == '\t'){
-         siguiente = 0; // si encuentra una de esas expresiones es porque tiene que pasar a la siguiente palabra
-      }
-      else if(siguiente == 0){ // se setea "siguiente" en 1 cuando termina una palabra
-         siguiente = 1;
-         result++;
-      }
-      ++argp;
-   }
+   //while (*argp){
+   //   if (*argp== ' ' || *argp == '\n' || *argp == '\t'){
+   //      siguiente = 0; // si encuentra una de esas expresiones es porque tiene que pasar a la siguiente palabra
+   //   }
+   //   else if(siguiente == 0){ // se setea "siguiente" en 1 cuando termina una palabra
+   //      siguiente = 1;
+   //      result++;
+   //   }
+   //   ++argp;
+   //}
 
 	return &result;
 }
