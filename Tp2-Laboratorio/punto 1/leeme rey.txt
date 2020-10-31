@@ -1,0 +1,2 @@
+primero inicia el servidor  ./calculadora_servidor
+luego para hacer pruebas  ./calculadora_cliente localhost operando1 operando2.
