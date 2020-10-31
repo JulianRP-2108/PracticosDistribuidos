@@ -3,65 +3,63 @@
  * These are only templates and you can use them
  * as a guideline for developing your own functions.
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 
 #include "servidor.h"
+#include <string.h>
 
-int *
-cant_carac_e_1_svc(argumento *palabras, struct svc_req *rqstp)
-{
-	static int  result;
-	char* frase;
-	frase=palabras->frase;
-	printf("\n La frase recibida en el servidor es: %s",frase);
-   //result=0;
-   //char* aux=strcpy(aux,argp);
-   //printf("\n Aux es: %s",aux);
-	//while(*aux!='\0'){
-   //   result ++;
-   //   ++aux;
-   //   printf("\n dentro del while es: %c",aux[0]);
-   //}
-   //printf("\n El resultado es: %i",result);
-	return &result;
-}
-
-int *
-cant_carac_se_1_svc(argumento *argp, struct svc_req *rqstp)
-{
-	static int  result;
-
-   //while (*argp){
-   //   if (*argp== ' ' || *argp == '\n' || *argp == '\t'){
-   //      //nada
-   //   }
-   //   else { 
-   //      result++;
-   //   }
-   //   ++argp;
-   //}
-	return &result;
-}
-
-int *
-cant_palabras_1_svc(argumento *argp, struct svc_req *rqstp)
+int *cant_carac_e_1_svc(argumento *palabras, struct svc_req *rqstp)
 {
 	static int result=0;
 
-	int siguiente = 0;
-   //while (*argp){
-   //   if (*argp== ' ' || *argp == '\n' || *argp == '\t'){
-   //      siguiente = 0; // si encuentra una de esas expresiones es porque tiene que pasar a la siguiente palabra
-   //   }
-   //   else if(siguiente == 0){ // se setea "siguiente" en 1 cuando termina una palabra
-   //      siguiente = 1;
-   //      result++;
-   //   }
-   //   ++argp;
-   //}
+	char *frase;
+	frase = palabras->frase;
+	result = strlen(frase);
+	return &result;
+}
+int *cant_carac_se_1_svc(argumento *palabras, struct svc_req *rqstp)
+{
+	static int result=0;
+	int aux=0;
+	char *frase;
+	frase = palabras->frase;
+	while (*frase)
+	{
+		if (*frase == ' ' || *frase == '\n' || *frase == '\t')
+		{
+			//nada
+		}
+		else
+		{
+			aux++;
+		}
+		++frase;
+	}
+	result=aux;
+	return &result;
+}
 
+int *cant_palabras_1_svc(argumento *palabras, struct svc_req *rqstp)
+{
+	static int result=0;
+	int aux=0;
+	char *frase;
+	frase = palabras->frase;
+
+	int siguiente = 0;
+
+	while (*frase)
+	{
+		if (*frase == ' ' || *frase == '\n' || *frase == '\t')
+		{
+			siguiente = 0; // si encuentra una de esas expresiones es porque tiene que pasar a la siguiente palabra
+		}
+		else if (siguiente == 0)
+		{ // se setea "siguiente" en 1 cuando termina una palabra
+			siguiente = 1;
+			aux++;
+		}
+		++frase;
+	}
+	result=aux;
 	return &result;
 }

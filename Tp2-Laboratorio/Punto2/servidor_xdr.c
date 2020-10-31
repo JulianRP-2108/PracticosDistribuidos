@@ -6,11 +6,21 @@
 #include "servidor.h"
 
 bool_t
+xdr_str_t (XDR *xdrs, str_t *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_string (xdrs, objp, 255))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
 xdr_argumento (XDR *xdrs, argumento *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->frase, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_str_t (xdrs, &objp->frase))
 		 return FALSE;
 	return TRUE;
 }

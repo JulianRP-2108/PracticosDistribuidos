@@ -14,8 +14,10 @@ extern "C" {
 #endif
 
 
+typedef char *str_t;
+
 struct argumento {
-	char *frase;
+	str_t frase;
 };
 typedef struct argumento argumento;
 
@@ -50,9 +52,11 @@ extern int punto2server_1_freeresult ();
 /* the xdr functions */
 
 #if defined(__STDC__) || defined(__cplusplus)
+extern  bool_t xdr_str_t (XDR *, str_t*);
 extern  bool_t xdr_argumento (XDR *, argumento*);
 
 #else /* K&R C */
+extern bool_t xdr_str_t ();
 extern bool_t xdr_argumento ();
 
 #endif /* K&R C */

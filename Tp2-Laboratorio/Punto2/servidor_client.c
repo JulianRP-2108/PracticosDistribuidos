@@ -3,23 +3,21 @@
  * These are only templates and you can use them
  * as a guideline for developing your own functions.
  */
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "servidor.h"
 
-void punto2server_1(char *host, argumento palabras)
+void punto2server_1(char *host,argumento parametros)
 {
 	CLIENT *clnt;
 	int *result_1;
-	//argumento cant_carac_e_1_arg;
+	argumento cant_carac_e_1_arg=parametros;
 	int *result_2;
-	//argumento cant_carac_se_1_arg;
+	argumento cant_carac_se_1_arg=parametros;
 	int *result_3;
-	//argumento cant_palabras_1_arg;
+	argumento cant_palabras_1_arg=parametros;
 
 #ifndef DEBUG
-	clnt = clnt_create(host, Punto2Server, VERSION_PROGRAMA, "udp");
+	clnt = clnt_create(host, Punto2Server, VERSION_PROGRAMA, "tcp");
 	if (clnt == NULL)
 	{
 		clnt_pcreateerror(host);
@@ -27,26 +25,26 @@ void punto2server_1(char *host, argumento palabras)
 	}
 #endif /* DEBUG */
 
-	result_1 = cant_carac_e_1(&palabras, clnt);
+	result_1 = cant_carac_e_1(&cant_carac_e_1_arg, clnt);
 	if (result_1 == (int *)NULL)
 	{
 		clnt_perror(clnt, "call failed");
 	}else{
-		printf("\n La cantidad de caracteres con espacios es: %d",*result_1);
+		printf("\n La cantidad de caracteres incluyendo espacios es: %d",*result_1);
 	}
-	result_2 = cant_carac_se_1(&palabras, clnt);
+	result_2 = cant_carac_se_1(&cant_carac_se_1_arg, clnt);
 	if (result_2 == (int *)NULL)
 	{
 		clnt_perror(clnt, "call failed");
 	}else{
-		printf("\n La cantidad de caracteres sin espacios es: %d",*result_2);
+		printf("\n La cantidad de caracteres sin contar espacios es: %d",*result_2);
 	}
-	result_3 = cant_palabras_1(&palabras, clnt);
+	result_3 = cant_palabras_1(&cant_palabras_1_arg, clnt);
 	if (result_3 == (int *)NULL)
 	{
 		clnt_perror(clnt, "call failed");
 	}else{
-		printf("\n La cantidad de palabras es: %d",*result_3);
+		printf("\n La cantidad de palabras es: %d\n",*result_3);
 	}
 #ifndef DEBUG
 	clnt_destroy(clnt);
@@ -66,8 +64,8 @@ int main(int argc, char *argv[])
 	}
 	host = argv[1];
 	frase = argv[2];
-	argumento palabras;
-	palabras.frase=frase;
-	punto2server_1(host, palabras);
+	argumento parametros;
+	parametros.frase=frase;
+	punto2server_1(host, parametros);
 	exit(0);
 }

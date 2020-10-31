@@ -1,5 +1,7 @@
+typedef string str_t<255>;
+
 struct argumento{
-    char* frase;
+    str_t frase;
 };
 
 program Punto2Server{
