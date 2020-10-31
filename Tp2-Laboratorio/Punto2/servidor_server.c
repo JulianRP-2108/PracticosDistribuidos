@@ -20,22 +20,35 @@ int *
 cant_carac_se_1_svc(char *argp, struct svc_req *rqstp)
 {
 	static int  result;
-
-	/*
-	 * insert server code here
-	 */
-
+;
+   while (*argp){
+      if (*argp== ' ' || *argp == '\n' || *argp == '\t'){
+         //nada
+      }
+      else { 
+         result++;
+      }
+      ++argp;
+   }
 	return &result;
 }
 
 int *
 cant_palabras_1_svc(char *argp, struct svc_req *rqstp)
 {
-	static int  result;
+	static int result=0;
 
-	/*
-	 * insert server code here
-	 */
+	int siguiente = 0;
+   while (*argp){
+      if (*argp== ' ' || *argp == '\n' || *argp == '\t'){
+         siguiente = 0; // si encuentra una de esas expresiones es porque tiene que pasar a la siguiente palabra
+      }
+      else if(siguiente == 0){ // se setea "siguiente" en 1 cuando termina una palabra
+         siguiente = 1;
+         result++;
+      }
+      ++argp;
+   }
 
 	return &result;
 }
