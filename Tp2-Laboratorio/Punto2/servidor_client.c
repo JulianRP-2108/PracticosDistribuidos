@@ -3,7 +3,9 @@
  * These are only templates and you can use them
  * as a guideline for developing your own functions.
  */
-
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "servidor.h"
 
 void punto2server_1(char *host, argumento palabras)

@@ -3,13 +3,20 @@
  * These are only templates and you can use them
  * as a guideline for developing your own functions.
  */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 
 #include "servidor.h"
 
 int *
-cant_carac_e_1_svc(argumento *argp, struct svc_req *rqstp)
+cant_carac_e_1_svc(argumento *palabras, struct svc_req *rqstp)
 {
 	static int  result;
+	char* frase;
+	frase=palabras->frase;
+	printf("\n La frase recibida en el servidor es: %s",frase);
    //result=0;
    //char* aux=strcpy(aux,argp);
    //printf("\n Aux es: %s",aux);
