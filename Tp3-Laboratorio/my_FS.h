@@ -28,6 +28,7 @@ struct archivo
 };
 
 #define CANTCACHE 50
+#define RUTA "storage"
 struct archivo cache[CANTCACHE];
 
 #define FILESYSTEM 0x20000001
