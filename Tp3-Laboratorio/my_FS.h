@@ -21,6 +21,15 @@ struct argumento {
 };
 typedef struct argumento argumento;
 
+struct archivo
+{
+    char *nombreArchivo;
+    char *contenido;
+};
+
+#define CANTCACHE 50
+struct archivo cache[CANTCACHE];
+
 #define FILESYSTEM 0x20000001
 #define FILESYSTEMVERS 1
 

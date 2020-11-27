@@ -6,8 +6,7 @@
 
 #include "my_FS.h"
 
-str_t *
-getfile_1_svc(argumento *argp, struct svc_req *rqstp)
+str_t * getfile_1_svc(argumento *argp, struct svc_req *rqstp)
 {
 	static str_t  result;
 
@@ -40,4 +39,66 @@ signal_1_svc(void *argp, struct svc_req *rqstp)
 	 */
 
 	return &result;
+}
+
+
+int getSizeCache(struct archivo cache[]){
+    int total=0;
+    for(int i=0;i<CANTCACHE-1;i++){
+        if(cache[i].nombreArchivo!=NULL){
+            total+=strlen(cache[i].nombreArchivo);
+            total+=strlen(cache[i].contenido);
+        }
+    }
+    return total;
+}
+
+int insertarEnCache(char* nombreArchivo,char*contenido,struct archivo cache[]){
+    
+    long cacheSize=getSizeCache(cache);
+    long archivoSize=strlen(contenido)+strlen(nombreArchivo);
+    while((cacheSize + archivoSize) > 512000000){  //strlen devuelve el valor en bytes
+        //Voy a eliminar el elemento mas grande que resida en cache hasta que haya espacio
+        long mayor=strlen(cache[0].nombreArchivo)+strlen(cache[0].contenido);
+        int pos=0;
+        for(int i=1;CANTCACHE-1;i++){        //busco el mayor
+            if(cache[i].nombreArchivo!=NULL){
+                if(strlen(cache[i].nombreArchivo)+strlen(cache[i].contenido)>mayor){
+                    mayor=strlen(cache[i].nombreArchivo)+strlen(cache[i].contenido);
+                    pos=i;
+                }
+            }
+        }
+        cache[pos].nombreArchivo=NULL;
+        cache[pos].contenido=NULL;            //"borro" el struct mas grande (pongo los campos en null)
+        cacheSize=getSizeCache(cache);    //actualizo el tamaño
+    }
+    //una vez que ya tengo espacio
+    struct archivo nulo;
+    for(int i=0;CANTCACHE-1;i++){
+        if(cache[i].nombreArchivo==NULL){
+                cache[i].nombreArchivo=nombreArchivo;
+                cache[i].contenido=contenido;
+                break;
+        }
+    }
+    return 0;
+}
+char* buscarEnCache(char *nombreArhivo,struct archivo cache[]){
+    char* contenido;
+    int encontro=0;
+    for(int i=0;i<CANTCACHE-1;i++){
+        if(cache[i].nombreArchivo!=NULL){
+            if(strcmp(cache[i].nombreArchivo,nombreArhivo)==0){
+                contenido=cache[i].contenido;  
+                encontro=1;
+                break;
+            }
+        }
+    }
+    if(encontro){
+        return contenido;
+    }else{
+        return NULL;
+    }
 }
