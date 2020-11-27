@@ -1,4 +1,4 @@
-typedef string str_t<1024>;
+typedef string str_t<520000>;
 
 struct argumento{
     str_t nombreArchivo;
