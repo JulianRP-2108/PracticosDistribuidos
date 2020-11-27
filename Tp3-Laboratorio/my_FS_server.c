@@ -5,23 +5,62 @@
  */
 
 #include "my_FS.h"
-#include <pthread.h>
 
-// se crea el mutex
-pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
+
+char* getContent(char *nombreArchivo)
+{
+    char *buffer;
+    long length;
+    char rutaCompleta[300];
+    strcpy(rutaCompleta,RUTA);
+    strcat(rutaCompleta,"/");
+    strcat(rutaCompleta,nombreArchivo);
+    FILE *f = fopen(rutaCompleta, "rb");
+
+    if (f)
+    {
+        fseek(f, 0, SEEK_END);
+        length = ftell(f);
+        printf("\n Dentro del getContent: %d",length);
+        fseek(f, 0, SEEK_SET);
+        buffer = malloc(length);
+        if (buffer)
+        {
+            fread(buffer, 1, length, f);
+        }
+        fclose(f);
+    }
+    return buffer;
+}
+
+
 
 str_t * getfile_1_svc(argumento *argp, struct svc_req *rqstp)
-{
-	static str_t  result;
-	// accede a la seccion critica
-	pthread_mutex_lock(&m);
+       {
+	    static str_t  result;
 
+	    result= buscarEnCache(argp,rqstp);
 
-	pthread_mutex_unlock(&m);
-	// sale de la seccion critica
+	    if(result!=NULL){
+		return result;
+	    }
+	    if (buscarEnDirectorio(argp) == 1)
+	    {
+		result=getContent(argp);///esta no se si tengo que agregarla
+		long total=strlen(result)+strlen(argp);  //Cada char pesa un byte
+		
+		if(total<=512000000){
+		                                         //cargarlo en cache
+		    insertarEnCache(argp,result,rqstp);
+		}
+	    }else{
+		result=NULL;
+	    }
+
+	 
 
 	return &result;
-}
+        }
 
 int *
 wait_1_svc(void *argp, struct svc_req *rqstp)
@@ -45,66 +84,4 @@ signal_1_svc(void *argp, struct svc_req *rqstp)
 	 */
 
 	return &result;
-}
-
-
-int getSizeCache(struct archivo cache[]){
-    int total=0;
-    for(int i=0;i<CANTCACHE-1;i++){
-        if(cache[i].nombreArchivo!=NULL){
-            total+=strlen(cache[i].nombreArchivo);
-            total+=strlen(cache[i].contenido);
-        }
-    }
-    return total;
-}
-
-int insertarEnCache(char* nombreArchivo,char*contenido,struct archivo cache[]){
-    
-    long cacheSize=getSizeCache(cache);
-    long archivoSize=strlen(contenido)+strlen(nombreArchivo);
-    while((cacheSize + archivoSize) > 512000000){  //strlen devuelve el valor en bytes
-        //Voy a eliminar el elemento mas grande que resida en cache hasta que haya espacio
-        long mayor=strlen(cache[0].nombreArchivo)+strlen(cache[0].contenido);
-        int pos=0;
-        for(int i=1;CANTCACHE-1;i++){        //busco el mayor
-            if(cache[i].nombreArchivo!=NULL){
-                if(strlen(cache[i].nombreArchivo)+strlen(cache[i].contenido)>mayor){
-                    mayor=strlen(cache[i].nombreArchivo)+strlen(cache[i].contenido);
-                    pos=i;
-                }
-            }
-        }
-        cache[pos].nombreArchivo=NULL;
-        cache[pos].contenido=NULL;            //"borro" el struct mas grande (pongo los campos en null)
-        cacheSize=getSizeCache(cache);    //actualizo el tamaño
-    }
-    //una vez que ya tengo espacio
-    struct archivo nulo;
-    for(int i=0;CANTCACHE-1;i++){
-        if(cache[i].nombreArchivo==NULL){
-                cache[i].nombreArchivo=nombreArchivo;
-                cache[i].contenido=contenido;
-                break;
-        }
-    }
-    return 0;
-}
-char* buscarEnCache(char *nombreArhivo,struct archivo cache[]){
-    char* contenido;
-    int encontro=0;
-    for(int i=0;i<CANTCACHE-1;i++){
-        if(cache[i].nombreArchivo!=NULL){
-            if(strcmp(cache[i].nombreArchivo,nombreArhivo)==0){
-                contenido=cache[i].contenido;  
-                encontro=1;
-                break;
-            }
-        }
-    }
-    if(encontro){
-        return contenido;
-    }else{
-        return NULL;
-    }
 }
