@@ -1,0 +1,16 @@
+Comandos utiles:
+    rpcgen -a my_FS.x  //Genera todos los archivos, solo cuando se cambia algo en el my_FS.x
+
+    make -f Makefile.my_FS //Compila cliente y servidor para generar ejecutables
+
+NOTAS:
+funcion wait() Tiene que reducir en 1 el semaforo del server y si pudo entrar devuelve 1
+funcion signal() Tiene que aumentar en 1 el semaforo del server, para avisar que termino
+
+funcion getFile(argumento) get contenido de archivo    
+                            --> Primero buscar en cache y luego en el directorio
+                            --> Si no estaba en la cache agregarlo
+                            --> Si la cache estaba muy llena reemplazar el contenido
+
+Imprimr el estado del server es una funcion propia de el, no es un servicio brindado al cliente
+Tiene que mostrar los intentos de conexion y guardar la cola pendiente

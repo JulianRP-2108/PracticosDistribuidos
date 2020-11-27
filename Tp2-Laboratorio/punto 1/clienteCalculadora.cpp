@@ -5,7 +5,7 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 	if (argc != 4) {
-		cerr << "Coso pone cliente_calculadora despues el <host>  y los operandos capo/a<op1> <op2>" << endl;
+		cerr << "Modo de uso: cliente_calculadora <host>  y los operandos <op1> <op2>" << endl;
 		return 1;
 	}
 	char *server = argv[1];
