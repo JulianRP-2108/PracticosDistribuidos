@@ -12,7 +12,6 @@ pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
 
 char* getContent(char *nombreArchivo)
 {
-	pthread_mutex_lock(&m);
     char *buffer;
     long length;
     char rutaCompleta[300];
@@ -34,7 +33,6 @@ char* getContent(char *nombreArchivo)
         }
         fclose(f);
     }
-	pthread_mutex_unlock(&m);
     return buffer;
 }
 
@@ -43,6 +41,7 @@ char* getContent(char *nombreArchivo)
 str_t * getfile_1_svc(argumento *argp, struct svc_req *rqstp)
        {
 	    static str_t  result;
+		pthread_mutex_lock(&m);
 
 	    result= buscarEnCache(argp,rqstp);
 
@@ -63,6 +62,7 @@ str_t * getfile_1_svc(argumento *argp, struct svc_req *rqstp)
 	    }
 
 	 
+		pthread_mutex_unlock(&m);
 
 	return &result;
         }
