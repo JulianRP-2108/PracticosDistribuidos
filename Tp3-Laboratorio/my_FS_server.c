@@ -5,14 +5,20 @@
  */
 
 #include "my_FS.h"
+#include <pthread.h>
+
+// se crea el mutex
+pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
 
 str_t * getfile_1_svc(argumento *argp, struct svc_req *rqstp)
 {
 	static str_t  result;
+	// accede a la seccion critica
+	pthread_mutex_lock(&m);
 
-	/*
-	 * insert server code here
-	 */
+
+	pthread_mutex_unlock(&m);
+	// sale de la seccion critica
 
 	return &result;
 }
