@@ -5,10 +5,14 @@
  */
 
 #include "my_FS.h"
+#include <pthread.h>
 
+// crear el mutex
+pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
 
 char* getContent(char *nombreArchivo)
 {
+	pthread_mutex_lock(&m);
     char *buffer;
     long length;
     char rutaCompleta[300];
@@ -30,6 +34,7 @@ char* getContent(char *nombreArchivo)
         }
         fclose(f);
     }
+	pthread_mutex_unlock(&m);
     return buffer;
 }
 
