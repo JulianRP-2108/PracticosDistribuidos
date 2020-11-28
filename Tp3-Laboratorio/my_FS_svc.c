@@ -72,14 +72,6 @@ filesystem_1(struct svc_req *rqstp, register SVCXPRT *transp)
 int
 main (int argc, char **argv)
 {
-
-	//Cuando inicia el server inicializo la cache en null
-    for(int i=0;i<CANTCACHE-1;i++){
-        cache[i].nombreArchivo=NULL;
-        cache[i].contenido=NULL;
-    }
-
-
 	register SVCXPRT *transp;
 
 	pmap_unset (FILESYSTEM, FILESYSTEMVERS);

@@ -8,7 +8,7 @@ int crearArchivo(str_t* resultado,char *nombreArchivo, char *rutaDestino)
     char* rutaFinal=strcat(rutaDestino,"/");
     rutaFinal=strcat(rutaFinal,nombreArchivo);
     printf("\nLa ruta destino es: %s",rutaFinal);
-    int resultado = 0;
+    // esta linea hace tirar error -->  int resultado = 0; 
     FILE *fp;
     int i;
     fp = fopen(rutaFinal, "w+");
@@ -61,8 +61,7 @@ filesystem_1(char *host, char* archivoPedido, char* rutaDestino)
 }
 
 // cliente.c 0.0.0.0 archivo.txt /Escritorio
-int
-main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	char *host;
 	char *archivoPedido;

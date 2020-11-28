@@ -7,11 +7,12 @@
 #include "my_FS.h"
 #include <pthread.h>
 #include <dirent.h>
+#define MAXNOMBRESIZE 200
 
 // crear el mutex
 pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
 
-char* getContent(char *nombreArchivo)
+str_t getContent(char *nombreArchivo)
 {
     char *buffer;
     long length;
@@ -25,7 +26,7 @@ char* getContent(char *nombreArchivo)
     {
         fseek(f, 0, SEEK_END);
         length = ftell(f);
-        printf("\n Dentro del getContent: %d",length);
+        printf("\n Dentro del getContent: %ld",length);
         fseek(f, 0, SEEK_SET);
         buffer = malloc(length);
         if (buffer)
@@ -35,86 +36,6 @@ char* getContent(char *nombreArchivo)
         fclose(f);
     }
     return buffer;
-}
-
-
-
-str_t * getfile_1_svc(argumento *argp, struct svc_req *rqstp)
-       {
-	    static str_t  result;
-		pthread_mutex_lock(&m);
-
-	    result= buscarEnCache(argp,rqstp);
-
-	    if(result!=NULL){
-		return result;
-	    }
-	    if (buscarEnDirectorio(argp) == 1)
-	    {
-		result=getContent(argp);///esta no se si tengo que agregarla
-		long total=strlen(result)+strlen(argp);  //Cada char pesa un byte
-		
-		if(total<=512000000){
-		                                         //cargarlo en cache
-		    insertarEnCache(argp,result,rqstp);
-		}
-	    }else{
-		result=NULL;
-	    }
-
-	 
-		pthread_mutex_unlock(&m);
-
-	return &result;
-        }
-
-int *
-wait_1_svc(void *argp, struct svc_req *rqstp)
-{
-	static int  result;
-
-	/*
-	 * insert server code here
-	 */
-
-	return &result;
-}
-
-int *
-signal_1_svc(void *argp, struct svc_req *rqstp)
-{
-	static int  result;
-
-	/*
-	 * insert server code here
-	 */
-
-	return &result;
-}
-
-
-int buscarEnDirectorio(char *nombreArchivo)
-{
-    int encontro = 0;
-    struct dirent *de; // Pointer for directory entry
-    // opendir() returns a pointer of DIR type.
-    DIR *dr = opendir(RUTA);
-
-    if (dr == NULL) // opendir returns NULL if couldn't open directory
-    {
-        printf("\nNo se pudo abrir el directorio");
-        return -1;
-    }
-    while ((de = readdir(dr)) != NULL)
-    {
-        if (strcmp(de->d_name, nombreArchivo) == 0)
-        {
-            encontro = 1;
-        }
-    }
-
-    closedir(dr);
-    return encontro;
 }
 
 int getSizeCache(struct archivo cache[]){
@@ -159,12 +80,14 @@ int insertarEnCache(char* nombreArchivo,char*contenido,struct archivo cache[]){
     }
     return 0;
 }
-char* buscarEnCache(char *nombreArhivo,struct archivo cache[]){
-    char* contenido;
+
+
+str_t buscarEnCache(str_t nombreArchivo,struct archivo cache[]){
+    str_t contenido;
     int encontro=0;
     for(int i=0;i<CANTCACHE-1;i++){
         if(cache[i].nombreArchivo!=NULL){
-            if(strcmp(cache[i].nombreArchivo,nombreArhivo)==0){
+            if(strcmp(cache[i].nombreArchivo,nombreArchivo)==0){
                 contenido=cache[i].contenido;  
                 encontro=1;
                 break;
@@ -178,28 +101,84 @@ char* buscarEnCache(char *nombreArhivo,struct archivo cache[]){
     }
 }
 
-char* getContent(char *nombreArchivo)
+int buscarEnDirectorio(char *nombreArchivo)
 {
-    char *buffer;
-    long length;
-    char rutaCompleta[300];
-    strcpy(rutaCompleta,RUTA);
-    strcat(rutaCompleta,"/");
-    strcat(rutaCompleta,nombreArchivo);
-    FILE *f = fopen(rutaCompleta, "rb");
+    int encontro = 0;
+    struct dirent *de; // Pointer for directory entry
+    // opendir() returns a pointer of DIR type.
+    DIR *dr = opendir(RUTA);
 
-    if (f)
+    if (dr == NULL) // opendir returns NULL if couldn't open directory
     {
-        fseek(f, 0, SEEK_END);
-        length = ftell(f);
-        printf("\n Dentro del getContent: %d",length);
-        fseek(f, 0, SEEK_SET);
-        buffer = malloc(length);
-        if (buffer)
-        {
-            fread(buffer, 1, length, f);
-        }
-        fclose(f);
+        printf("\nNo se pudo abrir el directorio");
+        return -1;
     }
-    return buffer;
+    while ((de = readdir(dr)) != NULL)
+    {
+        if (strcmp(de->d_name, nombreArchivo) == 0)
+        {
+            encontro = 1;
+        }
+    }
+
+    closedir(dr);
+    return encontro;
 }
+
+
+
+str_t* getfile_1_svc(argumento *argp, struct svc_req *rqstp)
+       {
+	    static str_t  result;
+		pthread_mutex_lock(&m);
+
+	    result=buscarEnCache(argp->nombreArchivo,cache);
+
+	    if(result!=NULL){
+		return &result;
+	    }
+	    if (buscarEnDirectorio(argp->nombreArchivo) == 1)
+	    {
+		result=getContent(argp->nombreArchivo);///esta no se si tengo que agregarla
+		long total=strlen(result)+strlen(argp->nombreArchivo);  //Cada char pesa un byte
+		
+		if(total<=512000000){
+		                                         //cargarlo en cache
+		    insertarEnCache(argp->nombreArchivo,result,cache);
+		}
+	    }else{
+		result=NULL;
+	    }
+
+	 
+		pthread_mutex_unlock(&m);
+
+	return &result;
+        }
+
+int *
+wait_1_svc(void *argp, struct svc_req *rqstp)
+{
+	static int  result;
+
+	/*
+	 * insert server code here
+	 */
+
+	return &result;
+}
+
+int *
+signal_1_svc(void *argp, struct svc_req *rqstp)
+{
+	static int  result;
+
+	/*
+	 * insert server code here
+	 */
+
+	return &result;
+}
+
+
+
