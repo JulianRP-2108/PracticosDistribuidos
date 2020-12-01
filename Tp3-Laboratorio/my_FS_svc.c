@@ -4,6 +4,7 @@
  */
 
 #include "my_FS.h"
+#include "variables.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <rpc/pmap_clnt.h>
@@ -96,6 +97,7 @@ main (int argc, char **argv)
 		exit(1);
 	}
 
+	inicializarCache;
 	svc_run ();
 	fprintf (stderr, "%s", "svc_run returned");
 	exit (1);

@@ -5,6 +5,7 @@
  */
 
 #include "my_FS.h"
+#include "variables.h"
 #include <pthread.h>
 #include <dirent.h>
 #define MAXNOMBRESIZE 200
@@ -41,10 +42,21 @@ str_t getContent(char *nombreArchivo)
         }
         fclose(f);
     }
+
+    printf("\n El contenido es: %s", buffer);
     return buffer;
 }
 
-int getSizeCache(struct archivo cache[])
+
+void inicializarCache(void){
+    //inicializo la cache en null
+    for(int i=0;i<CANTCACHE-1;i++){
+        cache[i].nombreArchivo=NULL;
+        cache[i].contenido=NULL;
+    }
+}
+
+int getSizeCache(struct archivo cache[CANTCACHE])
 {
     int total = 0;
     for (int i = 0; i < CANTCACHE - 1; i++)
@@ -60,6 +72,8 @@ int getSizeCache(struct archivo cache[])
 //Inserta donde primero encuentra un espacio nulo
 int insertarEnCache(char *nombreArchivo, char *contenido, struct archivo cache[])
 {
+    printf("\n Insertando el archivo: %s",nombreArchivo);
+    printf("\n Insertando el contenido: %s",contenido);
 
     long cacheSize = getSizeCache(cache);
     long archivoSize = strlen(contenido) + strlen(nombreArchivo);
@@ -91,6 +105,7 @@ int insertarEnCache(char *nombreArchivo, char *contenido, struct archivo cache[]
         {
             cache[i].nombreArchivo = nombreArchivo;
             cache[i].contenido = contenido;
+            printf("\n Insertando en la pos: %d",i);
             break;
         }
     }
@@ -99,13 +114,20 @@ int insertarEnCache(char *nombreArchivo, char *contenido, struct archivo cache[]
 
 str_t buscarEnCache(str_t nombreArchivo, struct archivo cache[])
 {
+    printf("\n El archivo buscado es: %s", nombreArchivo);
+    if(cache[0].nombreArchivo!=NULL){
+        printf("\n El archivo ya en la cache es: %s", cache[0].nombreArchivo);
+    }
     str_t contenido;
     int encontro = 0;
     for (int i = 0; i < CANTCACHE - 1; i++)
     {
         if (cache[i].nombreArchivo != NULL)
         {
-            if (strcmp(cache[i].nombreArchivo, nombreArchivo) == 0)
+            printf("\naaaaaa %s",cache[i].nombreArchivo);
+            printf("\nbbbbbbb %s",nombreArchivo);
+
+            if (strcmp(cache[i].nombreArchivo, (char*)nombreArchivo) == 0)
             {
                 contenido = cache[i].contenido;
                 encontro = 1;
@@ -151,6 +173,18 @@ int buscarEnDirectorio(char *nombreArchivo)
 int counter = 0;
 str_t *getfile_1_svc(argumento *argp, struct svc_req *rqstp)
 {
+    if(counter == 0){
+        inicializarCache();
+    }
+
+    printf("\n Estado actual de la cache: \n\n");
+    for(int i=0;i<CANTCACHE;i++){
+        if(cache[i].nombreArchivo != NULL){
+            printf("\nArchivo: %s", cache[i].nombreArchivo);
+        }
+    }
+
+
     static str_t result;
     pthread_mutex_lock(&m);
 

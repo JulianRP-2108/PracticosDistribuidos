@@ -5,8 +5,6 @@
 
 #ifndef _MY_FS_H_RPCGEN
 #define _MY_FS_H_RPCGEN
-#define CANTCACHE 50
-#define RUTA "storage"
 
 
 #include <rpc/rpc.h>
@@ -31,8 +29,7 @@ struct archivo
 };
 typedef struct archivo archivo;
 
- //armo la cache
-struct archivo cache[CANTCACHE];
+
 
 
 #define FILESYSTEM 0x20000001
