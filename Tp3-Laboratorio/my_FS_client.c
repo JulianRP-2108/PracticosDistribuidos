@@ -7,13 +7,15 @@ int crearArchivo(str_t* resultado,char *nombreArchivo, char *rutaDestino)
 {
     char* rutaFinal=strcat(rutaDestino,"/");
     rutaFinal=strcat(rutaFinal,nombreArchivo);
-    printf("\nLa ruta destino es: %s",rutaFinal);
-    // esta linea hace tirar error -->  int resultado = 0; 
+	printf("%s",rutaFinal);
+    printf("La ruta destino es: %s",rutaFinal);
     FILE *fp;
     int i;
+
     fp = fopen(rutaFinal, "w+");
+
 	//CREO QUE ESTO ME VA A DAR ERRPR POR EL TEMA QUE NO ES UN CHAR*
-    fwrite(resultado , 1 , strlen(resultado) , fp );
+    fwrite(resultado , 1 , strlen(*resultado) , fp );
     fclose(fp);
     printf("\nSe copio el archivo con exito.");
     return 0;
@@ -30,7 +32,6 @@ filesystem_1(char *host, char* archivoPedido, char* rutaDestino)
 	char *wait_1_arg;
 	int  *result_3;
 	char *signal_1_arg;
-
 #ifndef	DEBUG
 	clnt = clnt_create (host, FILESYSTEM, FILESYSTEMVERS, "tcp");
 	if (clnt == NULL) {
@@ -74,8 +75,8 @@ int main (int argc, char *argv[])
         exit(1);
 	}
 	host = argv[1];
-	archivoPedido = argv[3];
-    rutaDestino = argv[4];
+	archivoPedido = argv[2];
+    rutaDestino = argv[3];
 	filesystem_1 (host,archivoPedido,rutaDestino);
 exit (0);
 }
