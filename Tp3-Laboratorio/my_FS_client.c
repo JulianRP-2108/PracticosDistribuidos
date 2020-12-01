@@ -7,15 +7,13 @@ int crearArchivo(str_t* resultado,char *nombreArchivo, char *rutaDestino)
 {
     char* rutaFinal=strcat(rutaDestino,"/");
     rutaFinal=strcat(rutaFinal,nombreArchivo);
-	printf("%s",rutaFinal);
-    printf("La ruta destino es: %s",rutaFinal);
+    printf("\nLa ruta destino es: %s",rutaFinal);
     FILE *fp;
     int i;
 
     fp = fopen(rutaFinal, "w+");
 
-	//CREO QUE ESTO ME VA A DAR ERRPR POR EL TEMA QUE NO ES UN CHAR*
-    fwrite(resultado , 1 , strlen(*resultado) , fp );
+    fwrite(*resultado , 1 , strlen(*resultado) , fp );
     fclose(fp);
     printf("\nSe copio el archivo con exito.");
     return 0;
@@ -71,7 +69,7 @@ int main (int argc, char *argv[])
 
 	if (argc < 4) {
 		printf("\nFaltan parametros\n");
-        printf("\n Ejemplo: Cliente ARCHIVO RUTA_DESTINO");
+        printf("\n Ejemplo: ./my_fs_client IPSERVIDOR ARCHIVO /RUTA_DESTINO");
         exit(1);
 	}
 	host = argv[1];

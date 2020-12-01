@@ -26,7 +26,6 @@ str_t getContent(char *nombreArchivo)
     {
         fseek(f, 0, SEEK_END);
         length = ftell(f);
-        printf("\n Dentro del getContent: %ld",length);
         fseek(f, 0, SEEK_SET);
         buffer = malloc(length);
         if (buffer)
@@ -95,6 +94,7 @@ str_t buscarEnCache(str_t nombreArchivo,struct archivo cache[]){
         }
     }
     if(encontro){
+		printf("\nLo encontre en cache");
         return contenido;
     }else{
         return NULL;
@@ -126,11 +126,15 @@ int buscarEnDirectorio(char *nombreArchivo)
 }
 
 
-
+int counter=0;
 str_t* getfile_1_svc(argumento *argp, struct svc_req *rqstp)
        {
 	    static str_t  result;
 		pthread_mutex_lock(&m);
+
+		counter += 1;
+    	printf("\n Job %d started\n", counter);
+		printf("%s",rqstp->rq_clntcred);
 
 	    result=buscarEnCache(argp->nombreArchivo,cache);
 
@@ -150,7 +154,7 @@ str_t* getfile_1_svc(argumento *argp, struct svc_req *rqstp)
 		result=NULL;
 	    }
 
-	 
+		printf("\n Job %d finished\n", counter);
 		pthread_mutex_unlock(&m);
 
 	return &result;
