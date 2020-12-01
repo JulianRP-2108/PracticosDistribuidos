@@ -5,6 +5,7 @@
 
 int crearArchivo(str_t* resultado,char *nombreArchivo, char *rutaDestino)
 {
+	
     char* rutaFinal=strcat(rutaDestino,"/");
     rutaFinal=strcat(rutaFinal,nombreArchivo);
     printf("\nLa ruta destino es: %s",rutaFinal);
@@ -22,6 +23,7 @@ int crearArchivo(str_t* resultado,char *nombreArchivo, char *rutaDestino)
 void
 filesystem_1(char *host, char* archivoPedido, char* rutaDestino)
 {
+	
 	CLIENT *clnt;
 	str_t  *result_1;
 	argumento  argumento;
@@ -37,7 +39,6 @@ filesystem_1(char *host, char* archivoPedido, char* rutaDestino)
 		exit (1);
 	}
 #endif	/* DEBUG */
-
 	result_1 = getfile_1(&argumento, clnt);
 	if (result_1 == (str_t *) NULL) {
 		clnt_perror (clnt, "call failed");
